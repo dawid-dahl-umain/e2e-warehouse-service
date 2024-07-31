@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+    postgres:
+        image: postgres:15
+        container_name: e2e-pms-backend-db
+        ports:
+            - 5433:5432
+        volumes:
+            - e2e-postgres:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_DB=${POSTGRES_DB}
+        networks:
+            - e2e-main-network
+
+networks:
+    e2e-main-network:
+        name: e2e-pms-main-network
+
+volumes:
+    e2e-postgres:
+        name: e2e-pms-backend
