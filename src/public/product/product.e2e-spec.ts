@@ -14,9 +14,7 @@ describe("ProductController (E2E)", () => {
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [AppModule, ProductModule, PrismaModule]
-        })
-
-            .compile()
+        }).compile()
 
         app = moduleFixture.createNestApplication()
         prismaService = moduleFixture.get<PrismaService>(PrismaService)

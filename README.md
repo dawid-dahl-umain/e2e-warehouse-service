@@ -32,6 +32,16 @@
 $ npm install
 ```
 
+## Setup
+
+```bash
+# set up development database
+$ npm run db:up
+
+# set up e2e database
+$ npm run db:up:e2e
+```
+
 ## Running the app
 
 ```bash
@@ -49,10 +59,10 @@ $ npm run start:prod
 
 ```bash
 # unit tests
-$ npm run test
+$ npm run test:watch-all
 
 # e2e tests
-$ npm run test:e2e
+$ npm run test:e2e:watch-all
 
 # test coverage
 $ npm run test:cov
