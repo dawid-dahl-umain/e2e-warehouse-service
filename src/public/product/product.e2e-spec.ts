@@ -6,28 +6,37 @@ import request from "supertest"
 import { AppModule } from "src/app.module"
 import { CreateProductDto, CreateProductDtoFactory } from "./dto/product-dto"
 import { PrismaModule } from "src/private/prisma/prisma.module"
+import {
+    PRISMA_SEED_MANAGER_TOKEN,
+    PrismaSeedManagerProvider
+} from "src/private/seed-manager/PrismaSeedManagerProvider"
+import { IPrismaSeedManager } from "src/private/seed-manager/interface/interface"
 
 describe("ProductController (E2E)", () => {
     let app: INestApplication
     let prismaService: PrismaService
+    let prismaSeedManager: IPrismaSeedManager
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [AppModule, ProductModule, PrismaModule]
+            imports: [AppModule, ProductModule, PrismaModule],
+            providers: [PrismaSeedManagerProvider]
         }).compile()
 
         app = moduleFixture.createNestApplication()
         prismaService = moduleFixture.get<PrismaService>(PrismaService)
+        prismaSeedManager = moduleFixture.get<IPrismaSeedManager>(
+            PRISMA_SEED_MANAGER_TOKEN
+        )
 
         app.useGlobalPipes(new ValidationPipe())
 
         await app.init()
-
-        await prismaService.$executeRaw`TRUNCATE "public"."Product" RESTART IDENTITY CASCADE;`
+        await prismaSeedManager.clearDatabase()
     })
 
     afterEach(async () => {
-        await prismaService.$executeRaw`TRUNCATE "public"."Product" RESTART IDENTITY CASCADE;`
+        await prismaSeedManager.clearDatabase()
     })
 
     afterAll(async () => {
